@@ -1,0 +1,25 @@
+{
+  "name": "Interactive Chromium in Codespaces",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "forwardPorts": [6080, 6081, 9222],
+  "portsAttributes": {
+    "6080": {
+      "label": "Chromium browser",
+      "visibility": "private",
+      "onAutoForward": "notify"
+    },
+    "6081": {
+      "label": "Private file transfer",
+      "visibility": "private",
+      "onAutoForward": "notify"
+    },
+    "9222": {
+      "label": "Chrome DevTools Protocol",
+      "visibility": "private",
+      "onAutoForward": "notify"
+    }
+  },
+  "postStartCommand": ".devcontainer/start-chrome.sh"
+}
