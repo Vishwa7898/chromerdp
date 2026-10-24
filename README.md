@@ -21,15 +21,19 @@ endpoint allows browser control and has no built-in authentication.
 Browser downloads are saved directly on the Codespace server under
 `/workspaces/chromerdp-files`; they do not need to pass through your PC. To fetch
 a file from a URL, open that URL in Chromium, or run `curl -L 'URL' -o
-/workspaces/chromerdp-files/filename` in the Codespace terminal. Then open
-YouTube in the Codespace browser, choose **Upload videos**, and select the file
-from `/workspaces/chromerdp-files` in the file picker. If needed, use the
-file-picker location field to enter that full path.
+/workspaces/chromerdp-files/filename` in the Codespace terminal.
 
-Port `6081` is optional: use its private page only when you want to move a file
-between your PC and the Codespace. Transfers are streamed and support files up
-to 1 GB, including files around 500 MB. Files and the browser profile are stored
-in the Codespace workspace.
+To upload a downloaded file to a website such as Telegram Web or Google Drive,
+open that site in the Chromium desktop on port `6080` and use its normal attach
+or upload button. In the file picker, open `/workspaces/chromerdp-files` and
+select the file. If the picker has a location field, you can enter the full file
+path there. The file must be present in that folder; downloads made on your own
+computer are not automatically available in the Codespace browser.
+
+Port `6081` is optional and only moves files between your PC and the Codespace;
+it does not upload files to Telegram, Google Drive, or other websites. Transfers
+are streamed and support files up to 1 GB, including files around 500 MB. Files
+and the browser profile are stored in the Codespace workspace.
 
 To start or check the services manually:
 
