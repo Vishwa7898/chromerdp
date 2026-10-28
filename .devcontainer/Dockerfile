@@ -13,4 +13,4 @@ RUN apt-get update \
       xvfb \
     && rm -rf /var/lib/apt/lists/*
 
-COPY chromium-policy.json /etc/chromium/policies/managed/chromerdp.json
+COPY .devcontainer/chromium-policy.json /etc/chromium/policies/managed/chromerdp.json

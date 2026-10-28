@@ -1,7 +1,8 @@
 {
   "name": "Interactive Chromium in Codespaces",
   "build": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "Dockerfile",
+    "context": ".."
   },
   "forwardPorts": [6080, 6081, 9222],
   "portsAttributes": {
