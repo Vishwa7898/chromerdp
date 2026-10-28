@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codespace file transfer</title>
+<style>
+  body { font: 16px system-ui, sans-serif; margin: 2rem auto; max-width: 48rem; padding: 0 1rem; }
+  button, input { font: inherit; margin: .5rem 0; }
+  li { margin: .5rem 0; overflow-wrap: anywhere; }
+  #status { min-height: 1.5em; }
+</style>
+<h1>Codespace file transfer</h1>
+<p>Upload files from your computer to the browser's download and upload folder.
+Files up to 1 GB are streamed without loading them into memory.</p>
+<input id="file" type="file">
+<button id="upload">Upload to Codespace</button>
+<p id="status" role="status"></p>
+<h2>Files in the browser folder</h2>
+<ul id="files"></ul>
+<script>
+  const fileInput = document.querySelector("#file");
+  const status = document.querySelector("#status");
+  const list = document.querySelector("#files");
+
+  async function refreshFiles() {
+    const response = await fetch("/api/files");
+    if (!response.ok) throw new Error("Could not list Codespace files");
+    const files = await response.json();
+    list.replaceChildren();
+    for (const file of files) {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `/files/${encodeURIComponent(file.name)}`;
+      link.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+      item.append(link);
+      list.append(item);
+    }
+  }
+
+  document.querySelector("#upload").addEventListener("click", async () => {
+    const file = fileInput.files[0];
+    if (!file) {
+      status.textContent = "Choose a file first.";
+      return;
+    }
+    status.textContent = `Uploading ${file.name}...`;
+    try {
+      const response = await fetch(`/upload/${encodeURIComponent(file.name)}`, {
+        method: "PUT",
+        body: file
+      });
+      if (!response.ok) throw new Error(await response.text());
+      status.textContent = `Uploaded ${file.name}.`;
+      fileInput.value = "";
+      await refreshFiles();
+    } catch (error) {
+      status.textContent = `Upload failed: ${error.message}`;
+    }
+  });
+
+  refreshFiles().catch(error => { status.textContent = error.message; });
+</script>
+</html>
